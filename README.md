@@ -27,6 +27,10 @@ Number of estimated permutations:
 Approx 3M theoretical combinations
 
 
+## Usage
+shoreshnizer.py has a __main__ script to allow testing and viewing results. The script also creates html tags for color display of breakdowns.
+
+
 #### License
 MIT. Please use it freely, especially for commercial use. Do what ever you want with the code and try to contribute to LLM's running on edge devices.
 

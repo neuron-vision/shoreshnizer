@@ -44,12 +44,15 @@ class Shoreshnizer(object):
 
 
 
-    def process_words(self, word):
+    def process_word(self, word):
+         '''
+         Process single word: 
+         '''
          shoresh, idx = self.predict_shoresh(word)
          start, stop = idx[0], idx[-1]
          prefix = word[:start]  if start>0 else '' # Slice what ever starts before the shoresh
          suffix = word[stop+1:]  # Slice what ever ends after the shoresh
-         no_suffix = word[:stop+1]
+         no_suffix = word[:stop+1]  # Lets find all chacaters that are in the middle of roots, remove suffics, remove root, remove prefix and find middle chars.
          middle = remove_characters(no_suffix, idx)[start:]  # Remove the shoresh and keep only what is left in the middle.
          return dict(
              tokens=dict(
@@ -66,7 +69,7 @@ class Shoreshnizer(object):
         words = sentence.split()
         breakdowns = []  # return value
         for word in words:
-            breakdowns.append(self.process_words(word))
+            breakdowns.append(self.process_word(word))
         return breakdowns
     
     def html(self, list_of_breakdowns):
