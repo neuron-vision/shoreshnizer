@@ -44,7 +44,7 @@ The approximate count of potential permutations:
 | Cluster     |  #uniques      | #bits  |  possibilities  |
 | :----------- | :------------: |  ----- | :------------: |  
 | prefix       |   16           |   4    | ה, מ, א, ת, י, ת, נ, ני, הו, יו, תו, נו, או, לו, לי, הת, נת, ית, ו, |
-| roots        |   10648         | 15     | Let's assume 3 letters roots with 22 options per letter using 5 bits per word as upper bound        |
+| roots        |   10648         | 15     | Let's assume 3 letters roots with 22 options per letter using 5 bits per letter as an upper bound        |
 | infix       |   2            | 2      | י, ו
 | suffix       |   16           | 4      | תי, תם, תן, נו, ן, ונה, ה, ים, ות, נה, ת, י,                |
 
