@@ -38,7 +38,7 @@ With approximately 16 million possible combinations (25 bits), each Hebrew word 
 
 ## Code Usage
 rootenizer.py has a __main__ script to allow testing and viewing results. The script also creates html tags for color display of words breakdowns. See [html example](samples/1.html) here.
-
+See [Code README](src/README.md) for developers documentation.
 
 
 #### License
