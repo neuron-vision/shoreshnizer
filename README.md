@@ -1,6 +1,6 @@
 # Hebrew/Arabic semantic tokenizer utilizing root based words.
-The tokenizer assumes that most words in Hebrew and Arabic can be decomposed into a representation consisting of four subclasses of letters: Prefix, Root, Infix, and Suffix.
-The motivation is to utilize the unique structure of Hebrew/Arabic, where identifying the root allows clustering all other letters to "prefix", "suffix", "infix".
+The tokenizer assumes that most words in Hebrew and Arabic can be decomposed into a representation consisting of four subclasses of letters (clusters): Prefix, Root, Infix, and Suffix.
+The motivation is to utilize the unique structure of Hebrew/Arabic language, where identifying the root allows clustering all other letters to "prefix", "suffix", "infix" which maintains sematic information at a low dimensionality space. 
 
 
 For example:
@@ -13,8 +13,12 @@ For example:
 
 This decomposition method ensures that the full semantic context is retained in a compact representation. By using a low-dimensional approach, it becomes feasible to train a Hebrew/Arabic language model with a smaller amount of data compared to other options. The primary alternative approach involves representing each letter as an individual token, resulting in a high-dimensional representation that lacks semantic connections and necessitates a larger training dataset. However, for cases that don't conform to this approach, we can still resort to character-based tokens, which is the default fallback method for non-English languages.
 
+# Intuition
+When teaching children to read unfamiliar words, we encourage them to begin by guessing the word's root. The root of a word holds the majority of the information within the sentence. Once the root is determined, we can then comprehend how the non-root letters contribute to the overall meaning of the sentence.
+
+
 # Assumptions
-1. Cluster break down lowers the theoretical numbers of combinations from
+1. Cluster break-down lowers the theoretical numbers of combinations from
 > number_of_roots^number_of_prefix^number_of_suffix^number_of_infix 
 
 to 
@@ -34,7 +38,7 @@ which can fit every word into 32/64 bit.
 
 Estimated number of possible permutations:
 
-| Location     |  #uniques      | #bits  |  possibilities  |
+| Cluster     |  #uniques      | #bits  |  possibilities  |
 | :----------- | :------------: |  ----- | :------------: |  
 | prefix       |   16           |   4    | ה, מ, א, ת, י, ת, נ, ני, הו, יו, תו, נו, או, לו, לי, הת, נת, ית, ו, |
 | roots        |   10648         | 15     | Let's assume 3 letters roots with 22 options per letter using 5 bits per word as upper bound        |
