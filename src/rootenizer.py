@@ -1,5 +1,9 @@
 '''
-Running this class allows receiving a word or a collection of words to obtain a representation of tokens that preserves semantic meaning.
+Author: Ishay Tubi, Neuron Vision
+Date: June 14, 2023
+Description: 
+Running this class allows receiving a word or a collection of words and
+obtain a vector representation per word while preserving semantic meaning.
 '''
 
 from pathlib import Path as _P

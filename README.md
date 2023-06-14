@@ -57,8 +57,8 @@ With approximately 16 million possible combinations (25 bits), each Hebrew word 
 3. Support for nouns is still missing and will need to utilize 64bit instead of current 32bit representation.
 4. Prefix and Suffix quantization needs real data to perform optimally.
 5. Training process for auto encoder to measure reconstruction error is still missing.
-6. Root predictor is only place holder for now and will need a large dictionary for future training.
-7. Special charters only have 128 options and increasing from 32 bits to 64 bits will allow accommodating all of them. 
+6. Root predictor is only a place holder for now and will need a large dictionary for future training.
+7. Current special charters support is limited to only 128 charters and increasing from 32 bits to 64 bits will allow accommodating all of them. 
 
 
 

@@ -1,4 +1,7 @@
 '''
+Author: Ishay Tubi, Neuron Vision
+Date: June 14, 2023
+Description: 
 python class for nicer code completion
 '''
 

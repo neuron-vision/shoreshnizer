@@ -1,4 +1,8 @@
-
+'''
+Author: Ishay Tubi, Neuron Vision
+Date: June 14, 2023
+Description: Utility functions for clustering characters.
+'''
 from pathlib import Path as _P
 import os
 from typing import Tuple, List
