@@ -1,11 +1,11 @@
 '''
-הרצת המחלקה מאפשרת לקבל מילה או אוסף מילים לקבל ייצוג טוקנים משמר סמנטיקה
+Running this class allows receiving a word or a collection of words to obtain a representation of tokens that preserves semantic meaning.
 '''
 
-from typing import Any
 from pathlib import Path as _P
 import os
 import json
+from typing import Tuple, List
 
 
 def remove_characters(string:str, indices:list):
@@ -25,7 +25,10 @@ class WordBreakDown(object):
         self.suffix = suffix
 
     def __str__(self):
-        pass
+        return f"<{self.prefix}><{self.root}><{self.infix}><{self.suffix}>"
+    
+    def __repr__(self) -> str:
+        return self.__str__()
 
 class Shoreshnizer(object):
     '''
@@ -35,6 +38,16 @@ class Shoreshnizer(object):
         self.voc_path = _P(voc_path or 'resources/voc.json')
         self.shoresh_list = json.load(self.voc_path.open('rt'))
         print(f"Loaded {len(self.shoresh_list)} words with roots.")
+
+        # Hardcoded params to be moved out to configuration file later:
+        self.total_number_of_bits_per_word = 32  
+        self.number_of_bits = dict(
+            root = 5,  # Number of bits used for a single root char.
+            infix = 2,
+            prefix = 4,
+            suffix = 4,
+            other = 7  # Special chars
+        )
     
     def predict_shoresh(self, word:str):
         '''
@@ -44,75 +57,120 @@ class Shoreshnizer(object):
         '''
         word = word.strip()  # Remove blanks
         if word in self.shoresh_list:
-            shoresh, idx = self.shoresh_list[word]
-            return shoresh, idx
+            root, idx = self.shoresh_list[word]
+            return root, idx
         
         #Fallback 1: Apply fuzzy logic
         #Fallback 2: Select all as root for short words.
         #Fallback 3: Use char based?
         
-        # Not found, use fallback, the whole word is a shoresh?
+        # Not found, use fallback, the whole word is a root?
         return word, range(len(word))
 
 
-    def embed(self, breakdown:dict):
-        '''
-        Convert a breakdown dict into a vector.
-        '''
-        #for char in 
+    def character_index(self, char:str)->int:
+        o = ord(char)
+        if ord('א')<= o <= ord('ת'):
+            return o - ord('א')
+        elif ord('a')<= o <= ord('z'):
+            return o - ord('a')
+        else:
+            return o  # Return ascii index value for unknown chars.
 
-    def process_word(self, word):
+    def embed(self, breakdown:WordBreakDown):
+        '''
+        Convert a breakdown dict into a 32 unsigned integer.
+        '''
+        # Start with root chars.
+        embedding = 0
+        for i, char in enumerate(breakdown.root):
+            char_index = self.character_index(char) + 1  # Preserve 0 for no value, start with 1 for exiting value.
+            embedding += char_index
+            embedding <<= self.number_of_bits['root']
+        
+        # Embed infix chars (4 bit)
+        infix_translation = {
+            'יו':3,
+            'וי':3,
+            'י':1,
+            'ו':2,
+            '':0
+        }
+        infix_val = infix_translation.get(breakdown.infix, 0)
+        embedding += infix_val
+        embedding <<= self.number_of_bits['infix']
+
+        # TODO: Quantize prefix to 4 bits: placeholder logic until replaced.
+        suffix_val = sum([char-'א' for char in breakdown.suffix])
+        suffix_val &= (2**self.number_of_bits['suffix'] -1) # modulo with allowed number of bits.
+        embedding += suffix_val
+        embedding <<= self.number_of_bits['suffix']
+
+        # TODO: Quantize prefix to 4 bits: placeholder logic until replaced.
+        prefix_val = sum([ord(char)-ord('א') for char in breakdown.prefix])
+        prefix_val &= (2**self.number_of_bits['prefix'] -1) # modulo with allowed number of bits.
+        embedding += prefix_val
+        embedding <<= self.number_of_bits['prefix']
+
+        # TODO: Add spacial chars for remaining 7 bit
+        other_val = 0 
+        embedding += other_val
+        embedding <<= self.number_of_bits['prefix']
+        return embedding
+
+
+    def process_word(self, word) -> WordBreakDown:
          '''
          Process single word: Predict the root, assign all other chars with their locations.
 
          '''
-         shoresh, idx = self.predict_shoresh(word)
+         root, idx = self.predict_shoresh(word)
          start, stop = idx[0], idx[-1]
-         prefix = word[:start]  if start>0 else '' # Slice what ever starts before the shoresh
-         suffix = word[stop+1:]  # Slice what ever ends after the shoresh
-         no_suffix = word[:stop+1]  # Lets find all characters that are in the middle of roots, remove suffics, remove root, remove prefix and find middle chars.
-         middle = remove_characters(no_suffix, idx)[start:]  # Remove the shoresh and keep only what is left in the middle.
-         return dict(
-             tokens=dict(
+         prefix = word[:start]  if start>0 else '' # Slice what ever starts before the root
+         suffix = word[stop+1:]  # Slice what ever ends after the root
+         no_suffix = word[:stop+1]  # Lets find all characters that are in the infix of roots, remove suffix, remove root, remove prefix and find infix chars.
+         infix = remove_characters(no_suffix, idx)[start:]  # Remove the root and keep only what is left in the infix.
+         return WordBreakDown(
                 prefix=prefix,
-                shoresh=shoresh,
-                middle=middle,
+                root=root,
+                infix=infix,
                 suffix=suffix
-             ),
-             shoresh_start=start,
-             shoresh_stop=stop,
-         )
+        )
 
 
-    def __call__(self, sentence:str) -> Any:
+    def __call__(self, sentence:str) -> Tuple[List[int], List[WordBreakDown]]:
         ''' 
         Input: A sentence with multiple words separated with spaces.
         Output: List of dictionary breakdown per word.
         '''
         words = sentence.split()
-        breakdowns = []  # The returning value
+        breakdowns_list = []  # The returning value
+        embedding_list = []
         for word in words:
-            breakdowns.append(self.process_word(word))
-        return breakdowns
+            breakdown = self.process_word(word)
+            breakdowns_list.append(breakdown)
+
+            embedding = self.embed(breakdown)
+            embedding_list.append(embedding)
+        return embedding_list, breakdowns_list
     
-    def html(self, list_of_breakdowns):
+    def html(self, list_of_breakdowns) ->str:
         '''
         Utility to dump tokens with html colors
         '''
         css = "<style> \n \
-                .shoresh {background-color: yellow;} \n\
+                .root {background-color: yellow;} \n\
                 .prefix  {background-color: green;} \n\
-                .middle {background-color: orange;} \n\
+                .infix {background-color: orange;} \n\
                 .suffix {background-color: red;} \n\
                 </style>\n"
         html = '' + css + "\n"
-        for breakdown in list_of_breakdowns:
-            tokens = breakdown['tokens']
+        for b in list_of_breakdowns:
             message = \
-                "<span class=prefix>{prefix}</span> \
-                <span class=shoresh>{shoresh}</span> \
-                <span class=middle>{middle}</span> \
-                <span class=suffix>{suffix}</span>".format(**tokens)
+                f"<span class=prefix>{b.prefix}</span> \
+                <span class=root>{b.root}</span> \
+                <span class=infix>{b.infix}</span> \
+                <span class=suffix>{b.suffix}</span>"
 
             html = html + "</br>\n" + message
         return html
@@ -133,11 +191,11 @@ if __name__ == '__main__':
     self = Shoreshnizer(voc_path=voc_path)
     sentence = 'אם נסתכל על המשפט הזה נצליח להתבונן על מיקרי הקצה'
     sentence = "נסתכל להתבונן אוניברסיטה"
-    list_of_breakdowns = self(sentence)
-    html = self.html(list_of_breakdowns)
+    embedding_list, breakdowns_list = self(sentence)
+    html = self.html(breakdowns_list)
     sample_path = 'samples/1.html'
     _P(sample_path).open('wt').write(html)
     print(f"Samples is saved to {sample_path}")
     os.system(f'open {sample_path}') # Works on OSX only
-    print(list_of_breakdowns)
+    print(breakdowns_list)
 
