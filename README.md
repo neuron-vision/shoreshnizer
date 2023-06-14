@@ -34,6 +34,16 @@ With approximately 16 million possible combinations (25 bits), each Hebrew word 
 
 
 
+## Known pitfalls.
+1. We only support 3 letters-roots for now.
+2. We only support Hebrew for now until arabic speakers will join the project.
+3. Support for nouns is still missing and will need to utilize 64bit instead of current 32bit representation.
+4. Prefix and Suffix quantization needs real data to perform optimally.
+5. Training process for auto encoder to measure reconstruction error is still missing.
+6. Root predictor is only place holder for now and will need a large dictionary for future training.
+7. Special charters only have 128 options and increasing from 32 bits to 64 bits will allow accommodating all of them. 
+
+
 
 
 ## Code Usage
