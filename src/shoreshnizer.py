@@ -83,10 +83,13 @@ class Shoreshnizer(object):
         '''
         # Start with root chars.
         embedding = 0
+        root_bit_mask = (2**self.number_of_bits['root'] -1)
         for i, char in enumerate(breakdown.root):
             char_index = self.character_index(char) + 1  # Preserve 0 for no value, start with 1 for exiting value.
+            char_index = char_index % root_bit_mask  # Avoid overflow
             embedding += char_index
             embedding <<= self.number_of_bits['root']
+            if i >= 2: break  # TODO: we only support 3 chars per root for now.
         
         # Embed infix chars (4 bit)
         infix_translation = {
@@ -192,6 +195,8 @@ if __name__ == '__main__':
     sentence = 'אם נסתכל על המשפט הזה נצליח להתבונן על מיקרי הקצה'
     sentence = "נסתכל להתבונן אוניברסיטה"
     embedding_list, breakdowns_list = self(sentence)
+    print("embedding_list")
+    print(embedding_list)
     html = self.html(breakdowns_list)
     sample_path = 'samples/1.html'
     _P(sample_path).open('wt').write(html)
