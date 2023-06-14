@@ -1,4 +1,4 @@
-# Hebrew/Arabic semantic tokenizer utlizing root based words.
+# Hebrew/Arabic semantic tokenizer utilizing root based words.
 The tokenizer assumes that all words in Hebrew and Arabic can be decomposed into a representation consisting of four subclasses of letters: Prefix, Root, Infix, and Suffix.
 The motivation is to utilize the unique structure of Hebrew/Arabic, where identifying the root allows placing all other letters as "prefixes," "suffixes," or "infixes."
 
@@ -17,7 +17,7 @@ Such decomposition allows for the complete preservation of all semantic contexts
 
 Estimated number of possible permutations:
 
-| Location     |  #uniques      | #bits  |  possibilites  |
+| Location     |  #uniques      | #bits  |  possibilities  |
 | :----------- | :------------: |  ----- | :------------: |  
 | prefix       |   16           |   4    | ה, מ, א, ת, י, ת, נ, ני, הו, יו, תו, נו, או, לו, לי, הת, נת, ית, ו, |
 | roots        |   10648         | 15     | Let's assume 3 letters roots with 22 options per letter using 5 bits per word as upper bound        |
@@ -26,7 +26,7 @@ Estimated number of possible permutations:
 
 With approximately 16 million possible combinations (25 bits), each Hebrew word can be accommodated within a single 32-bit unsigned integer. The remaining 7 bits (128 values) can be utilized for special single character tokens, such as numerals, punctuation, and possibly English characters too.
 
-## Bits oredering from MSB to LSB
+## Bits ordering from MSB to LSB
 
 | 3rd letter in root | 2nd letter in root | 1st letter in root | infix | prefix | suffix | special chars |
 | :----------------- | :----------------- | :----------------- | :---- | :----- | :----- | :------------ |
