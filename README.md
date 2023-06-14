@@ -1,17 +1,17 @@
 # Hebrew/Arabic semantic tokenizer utilizing root based words.
-The tokenizer assumes that all words in Hebrew and Arabic can be decomposed into a representation consisting of four subclasses of letters: Prefix, Root, Infix, and Suffix.
-The motivation is to utilize the unique structure of Hebrew/Arabic, where identifying the root allows placing all other letters as "prefixes," "suffixes," or "infixes."
+The tokenizer assumes that most words in Hebrew and Arabic can be decomposed into a representation consisting of four subclasses of letters: Prefix, Root, Infix, and Suffix.
+The motivation is to utilize the unique structure of Hebrew/Arabic, where identifying the root allows clustering all other letters to "prefix", "suffix", "infix".
 
 
-לדוגמא:
-יתכנסו
+For example:
+
+1. יתכנסו:
 <ית><כנס><ו>
-הודעה:
+2. הודעה:
 <הו><ידע><ה>
 
 
-
-Such decomposition allows for the complete preservation of all semantic contexts in a low-dimensional representation. Small dimensions enable training a Hebrew/Arabic language engine using relatively less data compared to alternatives. The first alternative is, of course, representing each letter by its own token, which is a high-dimensional representation that loses semantic connections and requires a lot of data for training purposes.
+This decomposition method ensures that the full semantic context is retained in a compact representation. By using a low-dimensional approach, it becomes feasible to train a Hebrew/Arabic language model with a smaller amount of data compared to other options. The primary alternative approach involves representing each letter as an individual token, resulting in a high-dimensional representation that lacks semantic connections and necessitates a larger training dataset. However, for cases that don't conform to this approach, we can still resort to character-based tokens, which is the default fallback method for non-English languages.
 
 # Assumptions
 1. Cluster break down lowers the theoretical numbers of combinations from
@@ -28,6 +28,7 @@ which can fit every word into 32/64 bit.
 3. The tokenizer might separate same root to 2 different roots due to language unusual roots which is an acceptable error thats leads to a slight increase in dimensionality size but is not as bad as grouping 2 unrelated roots together. 
 
 4. The tokenizer alone cannot classify clusters other than the root (prefix, infix, suffix) due to missing context. This task should be left to the neural network that will use the tokens.
+
 
 # The input space size and its reduction.
 
