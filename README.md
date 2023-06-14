@@ -71,7 +71,6 @@ Given the existence of around 16 million potential combinations (25 bits), it is
 
 
 ## Code Usage
-rootenizer.py has a __main__ script to allow testing and viewing results. The script also creates html tags for color display of words breakdowns. 
 
 The rootenizer.py file includes a main script that enables testing and viewing of results. Additionally, the script generates HTML tags for displaying word breakdowns with color formatting. You can refer to the [html example](samples/1.html) to see a demonstration.
 
