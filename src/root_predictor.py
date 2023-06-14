@@ -1,7 +1,7 @@
 '''
 Author: Ishay Tubi, Neuron Vision
 Date: June 14, 2023
-Description: This class us used to predict root index for a given work.
+Description: This class is used to predict root index for a given work.
 First we use a dictionary and rule based until we can train one.
 '''
 
