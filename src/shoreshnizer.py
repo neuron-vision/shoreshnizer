@@ -8,12 +8,16 @@ import os
 import json
 
 
-def remove_characters(string, indices):
+def remove_characters(string:str, indices:list):
+    '''
+    Return only the characters that are not in indices 
+    '''
     return ''.join([char for idx, char in enumerate(string) if idx not in indices])
 
 
 class Shoreshnizer(object):
     '''
+    Predict the root of each root and cluster all the rest of the charcaters.
     '''
     def __init__(self, voc_path:str=None) -> None:
         self.voc_path = _P(voc_path or 'resurces/voc.json')
@@ -22,22 +26,21 @@ class Shoreshnizer(object):
     
     def predict_shoresh(self, word:str):
         '''
-        Return the index root and index of:
+        Return the index of root letters.
         Shorsh start,
         Shoresh end,
         '''
-        # For testing return 1,2,3 always if len is 3 and above.
         word = word.strip()  # Remove blanks
         if word in self.shoresh_list:
             shoresh, idx = self.shoresh_list[word]
             return shoresh, idx
-        #Apply fuzzy logic
-        #Select all as shoresh
-        #
-        #Use char based.
+        
+        #Fallback 1: Apply fuzzy logic
+        #Fallback 2: Select all as root for short words.
+        #Fallback 3: Use char based?
         
         # Not found, use fallback, the whole word is a shoresh?
-        return word, (0, len(word)-1)
+        return word, range(len(word))
 
 
 
@@ -74,7 +77,7 @@ class Shoreshnizer(object):
                 .shoresh {background-color: yellow;} \n\
                 .prefix  {background-color: green;} \n\
                 .middle {background-color: orange;} \n\
-                .suffix {background-color: red;} \
+                .suffix {background-color: red;} \n\
                 </style>"
         html = '' + css
         for breakdown in list_of_breakdowns:
@@ -89,6 +92,9 @@ class Shoreshnizer(object):
         return html
     
     def train(self):
+        '''
+        Minimize recunstruction error, Show the error is minized as a factor of the 
+        '''
         raise BaseException("מימוש חסר")
     
     def stats(self):
@@ -100,7 +106,7 @@ if __name__ == '__main__':
     voc_path = 'src/mini_shoreshnizer.json'
     self = Shoreshnizer(voc_path=voc_path)
     sentance = 'אם נסתכל על המשפט הזה נצליח להתבונן על מיקרי הקצה'
-    #sentance = "נסתכל להתבונן"
+    sentance = "נסתכל להתבונן אוניברסיטה"
     list_of_breakdowns = self(sentance)
     html = self.html(list_of_breakdowns)
     sample_path = 'samples/1.html'
