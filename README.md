@@ -29,14 +29,17 @@ which can fit every word into 32/64 bit.
 
 2. A good tokenizer is a quantization function which reduces dimensionality with minimum signal loss and should be estimated by reconstruction loss.
 
-3. The tokenizer might separate same root to 2 different roots due to language unusual roots which is an acceptable error thats leads to a slight increase in dimensionality size but is not as bad as grouping 2 unrelated roots together. 
+3. The tokenizer may occasionally split the same root into two different roots due to uncommon linguistic variations. While this is an acceptable error, it results in a slight increase in the size of the dimensionality. However, it is still preferable to the alternative of incorrectly grouping together two unrelated roots.
 
-4. The tokenizer alone cannot classify clusters other than the root (prefix, infix, suffix) due to missing context. This task should be left to the neural network that will use the tokens.
+
+4. The tokenizer, on its own, lacks the ability to classify clusters beyond the root (prefix, infix, suffix) due to the absence of contextual information. Therefore, it is necessary to delegate this task to the neural network, which can effectively utilize the tokens and employ contextual understanding for accurate classification.
+
 
 
 # The input space size and its reduction.
 
-Estimated number of possible permutations:
+The approximate count of potential permutations:
+
 
 | Cluster     |  #uniques      | #bits  |  possibilities  |
 | :----------- | :------------: |  ----- | :------------: |  
@@ -45,7 +48,7 @@ Estimated number of possible permutations:
 | infix       |   2            | 2      | י, ו
 | suffix       |   16           | 4      | תי, תם, תן, נו, ן, ונה, ה, ים, ות, נה, ת, י,                |
 
-With approximately 16 million possible combinations (25 bits), each Hebrew word can be accommodated within a single 32-bit unsigned integer. The remaining 7 bits (128 values) can be utilized for special single character tokens, such as numerals, punctuation, and possibly English characters too.
+Given the existence of around 16 million potential combinations (25 bits), it is feasible to represent each Hebrew/Arabic word using a single 32-bit unsigned integer. This leaves an additional 7 bits (128 values) that can be allocated for special single character tokens, including numerals, punctuation, and potentially even English characters.
 
 ## Bits ordering from MSB to LSB
 
@@ -55,24 +58,26 @@ With approximately 16 million possible combinations (25 bits), each Hebrew word 
 
 
 
-## Known pitfalls.
-1. We only support 3 letters-roots for now.
-2. We only support Hebrew for now until arabic speakers will join the project.
-3. Support for nouns is still missing and will need to utilize 64bit instead of current 32bit representation.
-4. Prefix and Suffix quantization needs real data to perform optimally.
-5. Training process for auto encoder to measure reconstruction error is still missing.
-6. Root predictor is only a place holder for now and will need a large dictionary for future training.
-7. Current special charters support is limited to only 128 charters and increasing from 32 bits to 64 bits will allow accommodating all of them. 
 
+## Identified challenges:
+1. At present, our support is limited to 3-letter roots.
+2. Our current support is limited to the Hebrew language until we have Arabic speakers involved in the project.
+3. The representation for nouns is not yet supported and will require a transition from the current 32-bit representation to a 64-bit representation.
+4. Quantization of prefixes and suffixes requires real data to achieve optimal performance.
+5. We still need to establish a training process for the autoencoder to measure reconstruction error.
+6. The current root predictor is a temporary solution and will require a substantial dictionary for future training.
+7. Our current support for special characters is restricted to 128 characters, and expanding from 32 bits to 64 bits will enable accommodating all of them.
 
 
 
 ## Code Usage
-rootenizer.py has a __main__ script to allow testing and viewing results. The script also creates html tags for color display of words breakdowns. See [html example](samples/1.html) here.
-See [Code README](src/README.md) for developers documentation.
+rootenizer.py has a __main__ script to allow testing and viewing results. The script also creates html tags for color display of words breakdowns. 
 
+The rootenizer.py file includes a main script that enables testing and viewing of results. Additionally, the script generates HTML tags for displaying word breakdowns with color formatting. You can refer to the [html example](samples/1.html) to see a demonstration.
 
-#### License
+For developer documentation, please consult the [Code README](src/README.md) It provides detailed information and instructions for developers working with the code.
+
+## License
 The code is licensed under MIT, granting you the freedom to use it freely, including for commercial purposes. Feel free to utilize the code as you wish and consider contributing to the development of language models running on edge devices.
 
 
