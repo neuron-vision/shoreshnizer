@@ -38,7 +38,7 @@ Estimated number of possible permutations:
 | :----------- | :------------: |  ----- | :------------: |  
 | prefix       |   16           |   4    | ה, מ, א, ת, י, ת, נ, ני, הו, יו, תו, נו, או, לו, לי, הת, נת, ית, ו, |
 | roots        |   10648         | 15     | Let's assume 3 letters roots with 22 options per letter using 5 bits per word as upper bound        |
-| middle       |   2            | 2      | י, ו
+| infix       |   2            | 2      | י, ו
 | suffix       |   16           | 4      | תי, תם, תן, נו, ן, ונה, ה, ים, ות, נה, ת, י,                |
 
 With approximately 16 million possible combinations (25 bits), each Hebrew word can be accommodated within a single 32-bit unsigned integer. The remaining 7 bits (128 values) can be utilized for special single character tokens, such as numerals, punctuation, and possibly English characters too.
