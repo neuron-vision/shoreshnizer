@@ -1,5 +1,5 @@
 # Hebrew/Arabic semantic tokenizer utilizing root based words.
-The tokenizer assumes that a large number of words in Hebrew and Arabic can be decomposed into a representation consisting of four subclasses of letters (clusters): Prefix, Root, Infix, and Suffix.
+The tokenizer assumes that a large number of words in Hebrew and Arabic can be decomposed into a representation consisting of four subclasses of letters (clusters): Prefix, Root, Infix, and Suffix (Abbreviated as PRIS).
 The initial step for the tokenizer involves identifying the indices of the root letters, which then enables the deterministic clustering of all the remaining letters. To avoid ambiguity that can only be resolved within a specific context, the tokenizer should refrain from assigning explicit roles, such as time, body, or בניין, to each clustered letter.
 
 
@@ -13,23 +13,19 @@ When teaching children to read unfamiliar words, we encourage them to begin by g
 
 
 
-# Abbreviation: 
+# PRIS Abbreviation Key: 
 |  Cluster Mark  |  Cluster name        |  Allowed length  | Remarks  |
 |  ------------  |  ------------        |  --------------- | ---------|
-| <\P>           |  Prefix              |   0..6           |          |
-| <\R1>          |  1st root character  |   0..1           | First root letter might drop |
-| <\I1>          |  Infix character     |   0..2           |     יו    |
+| <\P>           | Prefix               |   0..6           |          |
+| <\R1>          | 1st root letter      |   0..1           | First root letter might drop |
+| <\I1>          | Infix letter         |   0..2           |     יו    |
 | <\R2>          | 2nd letter           |   1              |           |
-| <\I2>          | Infix character      |   0..2           |   יו      |
-| <\R3>          | 3ed root character   |   1              |           |
-| <\S>           |  Suffix/Suffixes     |   0..7           | לכנה      |
+| <\I2>          | Infix letter         |   0..2           |   יו      |
+| <\R3>          | 3ed root letter      |   1              |           |
+| <\S>           | Suffix               |   0..7           | לכנה      |
 
-Number of possible legal combinations:
-| P | R1 | I1 | I2|
-| - |  - |  - | - | 
-| 6 | 2  |  2 | 2 |
 
-Total: 48 possible indices arrangements
+Total: 48 possible legal indices arrangements
 
 
 # Examples:
@@ -89,6 +85,12 @@ Given the existence of around 16 million potential combinations (25 bits), it is
 5. We still need to establish a training process for the autoencoder to measure reconstruction error.
 6. The current root predictor is a temporary solution and will require a substantial dictionary for future training.
 7. Our current support for special characters is restricted to 128 characters, and expanding from 32 bits to 64 bits will enable accommodating all of them.
+
+# Related Publications:
+
+| Name          | Description       | Link   |
+| :-----------  | :------------:    |  ----- |
+| SHOROSHIM     | An extremely comprehensive English-language thesaurus of over thirty-three hundred Hebrew verb roots (Shoroshim) from all historical periods dating from the Biblical through modern times.              |  [PDF](https://halakhah.com/rst/shoroshim.pdf) |
 
 
 
