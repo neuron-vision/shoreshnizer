@@ -92,26 +92,44 @@ class RootPredictor(object):
         )
 
 
+def copy_to_clipboard(text):  #OSX only: Copy text to buffer.
+    subprocess.run('pbcopy', universal_newlines=True, input=text)
+
+
 if __name__ == "__main__":
-    #Create all possbile indices combincations for root.
+    #Create all possible indices combinations for root.
+    #!pip install pandas
+    #!pip install tabulate
+    from pandas import DataFrame
+    import subprocess
 
     combinations = []
-    for p in range(0, 5):
-        for r1 in range(p, p+1):
-            for i1 in range(r1, r1+2):
-                for r2 in range(i1, i1+1):
-                    for i2 in range(r2, r2+1):
-                        for r3 in range(i2, i2+1):
+    #Each value states where the cluster ends.
+    for p in [0, 1, 2, 3, 4, 5]:
+        for r1 in [1]:
+            for i1 in [0, 1, 2]:
+                for r2 in [1]:
+                    for i2 in [0, 1, 2]:
+                        for r3 in [1]:
                             d = dict(
                                 p=p,
-                                r1=r1,
-                                i1=i1,
-                                r2=r2,
-                                i2=i2,
-                                r3=r3
+                                r1=r1+p,
+                                i1=i1+r1+p,
+                                r2=r2+i1+r1+p,
+                                i2=i2+r2+i1+r1+p,
+                                r3=r3+i2+r2+i1+r1+p
                             )
+                            root_indices = d['r1'] - 1, d['r2'] - 1, d['r3'] - 1 
+                            d['Root Indices'] = root_indices
                             combinations.append(d)
 
     print(f"Found Total of {len(combinations)} combinations.")
     for i, combination in enumerate(combinations):
         print(f"{i:4}\t{combination}")
+
+    with _P('draft/legal_root_indices.json').open('wt') as f:
+        json.dump(combinations, f)
+
+    d = DataFrame(combinations)
+    markdown_table = d.to_markdown()
+    copy_to_clipboard(markdown_table)
