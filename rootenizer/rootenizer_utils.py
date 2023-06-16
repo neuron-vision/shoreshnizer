@@ -6,7 +6,7 @@ Description: Utility functions for clustering characters.
 from pathlib import Path as _P
 import os
 from typing import Tuple, List
-from rootenizer.word_break_down import WordBreakDown
+
 
 
 def character_index(char:str)->int:

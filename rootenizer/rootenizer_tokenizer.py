@@ -14,7 +14,7 @@ from word_break_down import WordBreakDown
 from rootenizer_utils import character_index
 
 
-class Rootenizer(object):
+class RootenizerTokenizer(object):
     '''
     Predict the root of each root and cluster all the rest of the characters.
     '''

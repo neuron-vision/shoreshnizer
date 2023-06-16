@@ -31,15 +31,19 @@ Once matrix probs are known we can select a legal combination with highest likel
 
 #Another Suggestion: There are only a small number of legal permutations:
 
-possible_root_indices_arrangements = {
+possible_root_indices_arrangements = [
 [0, 1, 2], #  ישבנו
 [1, 2, 3], #  והלכנו
 [2, 3, 4], #  התישבנו
+[3, 4, 5], #
+[4, 5, 6], #
+[4, 6, 7], #
+[4, 5, 7], #
 [3, 3, 5], #  להושיב אין יוד של השורש ולכן נבלעה עם השין
 [0, 2, 3] #  יושבים
 # [?, ?, ?]  #TODO: What other are legal combinations exist?
 # 6 possible combinations is a smaller space then above 4*4 representation 
-}
+]
 
 
 from pathlib import Path as _P
@@ -47,7 +51,7 @@ import os
 import json
 from typing import Tuple, List
 from word_break_down import WordBreakDown
-from rootenizer_utils import remove_characters
+from rootenizer.rootenizer_utils import remove_characters
 
 
 class RootPredictor(object):
@@ -87,3 +91,27 @@ class RootPredictor(object):
             suffix=suffix
         )
 
+
+if __name__ == "__main__":
+    #Create all possbile indices combincations for root.
+
+    combinations = []
+    for p in range(0, 5):
+        for r1 in range(p, p+1):
+            for i1 in range(r1, r1+2):
+                for r2 in range(i1, i1+1):
+                    for i2 in range(r2, r2+1):
+                        for r3 in range(i2, i2+1):
+                            d = dict(
+                                p=p,
+                                r1=r1,
+                                i1=i1,
+                                r2=r2,
+                                i2=i2,
+                                r3=r3
+                            )
+                            combinations.append(d)
+
+    print(f"Found Total of {len(combinations)} combinations.")
+    for i, combination in enumerate(combinations):
+        print(f"{i:4}\t{combination}")
