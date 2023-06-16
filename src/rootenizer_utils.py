@@ -30,3 +30,17 @@ def remove_characters(string:str, indices:list):
     return ''.join([char for idx, char in enumerate(string) if idx not in indices])
 
 
+
+_sofiot_to_middle_translation = {
+    'ף':'פ',
+    'ך':'כ',
+    'ם':'מ',
+    'ן':'נ',
+    'ץ':'צ',    
+}
+
+def convert_sofiot_to_middle(word):
+    '''
+    Convert אותיות סופיות to אותיות אמצעיות so we can generalize the roots
+    '''
+    return ''.join([_sofiot_to_middle_translation.get(ot, ot) for ot in word])

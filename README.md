@@ -1,21 +1,44 @@
 # Hebrew/Arabic semantic tokenizer utilizing root based words.
-The tokenizer assumes that most words in Hebrew and Arabic can be decomposed into a representation consisting of four subclasses of letters (clusters): Prefix, Root, Infix, and Suffix.
-The motivation is to utilize the unique structure of Hebrew/Arabic language, where identifying the root allows clustering all other letters to "prefix", "suffix", "infix" which maintains sematic information at a low dimensionality space. 
+The tokenizer assumes that a large number of words in Hebrew and Arabic can be decomposed into a representation consisting of four subclasses of letters (clusters): Prefix, Root, Infix, and Suffix.
+The initial step for the tokenizer involves identifying the indices of the root letters, which then enables the deterministic clustering of all the remaining letters. To avoid ambiguity that can only be resolved within a specific context, the tokenizer should refrain from assigning explicit roles, such as time, body, or בניין, to each clustered letter.
 
 
-For example:
 
-1. יתכנסו:
-<ית><כנס><ו>
-2. הודעה:
-<הו><ידע><ה>
-
+# Motivation
 
 This decomposition method ensures that the full semantic context is retained in a compact representation. By using a low-dimensional approach, it becomes feasible to train a Hebrew/Arabic language model with a smaller amount of data compared to other options. The primary alternative approach involves representing each letter as an individual token, resulting in a high-dimensional representation that lacks semantic connections and necessitates a larger training dataset. However, for cases that don't conform to this approach, we can still resort to character-based tokens, which is the default fallback method for non-English languages.
 
 # Intuition
 When teaching children to read unfamiliar words, we encourage them to begin by guessing the word's root. The root of a word holds the majority of the information within the sentence. Once the root is determined, we can then comprehend how the non-root letters contribute to the overall meaning of the sentence.
 
+
+
+# Abbreviation: 
+|  Cluster Mark  |  Cluster name        |  Allowed length  | Remarks  |
+|  ------------  |  ------------        |  --------------- | ---------|
+| <\P>           |  Prefix              |   0..6           |          |
+| <\R1>          |  1st root character  |   0..1           | First root letter might drop |
+| <\I1>          |  Infix character     |   0..2           |     יו    |
+| <\R2>          | 2nd letter           |   1              |           |
+| <\I2>          | Infix character      |   0..2           |   יו      |
+| <\R3>          | 3ed root character   |   1              |           |
+| <\S>           |  Suffix/Suffixes     |   0..7           | לכנה      |
+
+Number of possible legal combinations:
+| P | R1 | I1 | I2|
+| - |  - |  - | - | 
+| 6 | 2  |  2 | 2 |
+
+Total: 48 possible indices arrangements
+
+
+# Examples:
+
+| Word | P         | R1 | I1 | R2 | I2 | R3 | S         |  Root Prediction Result |
+| :------------: | :-:       | :-: | :-: |  :-: | :-: | :------------: | :-: | :-: | 
+|ולכשהתפוצצויותיהם | ולכשהת | פ   | ו   | צ |  | צ   | ויותיהם | 6, 8, 9 |
+| יתכנסו |  ית | כ | | נ | | ס | ו | 2, 3, 4 |
+| הודעה | הו |  | | ד | | ע | ה | 2, 2, 3 |
 
 # Assumptions
 1. Cluster break-down lowers the theoretical numbers of combinations from
@@ -43,19 +66,18 @@ The approximate count of potential permutations:
 
 | Cluster     |  #uniques      | #bits  |  possibilities  |
 | :----------- | :------------: |  ----- | :------------: |  
-| prefix       |   16           |   4    | ה, מ, א, ת, י, ת, נ, ני, הו, יו, תו, נו, או, לו, לי, הת, נת, ית, ו, |
-| roots        |   10648         | 15     | Let's assume 3 letters roots with 22 options per letter using 5 bits per letter as an upper bound        |
-| infix       |   2            | 2      | י, ו
-| suffix       |   16           | 4      | תי, תם, תן, נו, ן, ונה, ה, ים, ות, נה, ת, י,                |
+| P       |   16           |   4    | ה, מ, א, ת, י, ת, נ, ני, הו, יו, תו, נו, או, לו, לי, הת, נת, ית, ו, |
+| R        |   10648         | 15     | Let's assume 3 letters roots with 22 options per letter using 5 bits per letter as an upper bound        |
+| I       |   2            | 2      | י, ו
+| S       |   16           | 4      | תי, תם, תן, נו, ן, ונה, ה, ים, ות, נה, ת, י,                |
 
-Given the existence of around 16 million potential combinations (25 bits), it is feasible to represent each Hebrew/Arabic word using a single 32-bit unsigned integer. This leaves an additional 7 bits (128 values) that can be allocated for special single character tokens, including numerals, punctuation, and potentially even English characters.
+Given the existence of around 16 million potential combinations (25 bits), it is feasible to represent  Hebrew/Arabic words with roots by using 32-bit unsigned integer. This leaves an additional 7 bits (128 values) that can be allocated for special single character tokens, including numerals, punctuation, and potentially even English characters. We will need to use the other 32 bits (in a 64 bit register) for nouns which cannot be represented by root based decomposition.
 
 ## Bits ordering from MSB to LSB
 
-| 3rd letter in root | 2nd letter in root | 1st letter in root | infix | prefix | suffix | special chars |
+| R1 | R2 | R3 | I | P | S | special chars |
 | :----------------- | :----------------- | :----------------- | :---- | :----- | :----- | :------------ |
 | 5                  | 5                  | 5                  | 2     | 4      | 4      | 7             |
-
 
 
 

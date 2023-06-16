@@ -3,7 +3,44 @@ Author: Ishay Tubi, Neuron Vision
 Date: June 14, 2023
 Description: This class is used to predict root index for a given work.
 First we use a dictionary and rule based until we can train one.
+
+
+Discussion:
+Which architecture is best fit for function which receveis a word with arcitrary length
+and returns and array of indices (length 3-5) per root letter locations.
+e.g.
+F('יהלכו') -> [1, 2, 3]
+F('יושיבו') -> [0, 2, 4]
+
+Suggestion:
+Output is always an array of maximum length 4 (support up to 4 letters root).
+4 * 4 matrix: 
+
+location                         |  loc 0 |  loc 1  |  loc 2  | loc 3 |
+prob for index is the 1st letter |        |         |         |       |
+prob for index is the 2nd letter |        |         |         |       |
+prob for index is the 3ed letter |        |         |         |       |
+prob for index is the 4th letter |        |         |         |       |
+
+Once matrix probs are known we can select a legal combination with highest likelihood.
+
+
 '''
+
+
+
+#Another Suggestion: There are only a small number of legal permutations:
+
+possible_root_indices_arrangements = {
+[0, 1, 2], #  ישבנו
+[1, 2, 3], #  והלכנו
+[2, 3, 4], #  התישבנו
+[3, 3, 5], #  להושיב אין יוד של השורש ולכן נבלעה עם השין
+[0, 2, 3] #  יושבים
+# [?, ?, ?]  #TODO: What other are legal combinations exist?
+# 6 possible combinations is a smaller space then above 4*4 representation 
+}
+
 
 from pathlib import Path as _P
 import os
