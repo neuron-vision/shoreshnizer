@@ -59,7 +59,7 @@ class RootPredictor(object):
         '''
         Use a dictionary and rule based until training data is gathered.
         '''
-        self.voc_path = _P(voc_path or 'src/mini_shoreshnizer.json')
+        self.voc_path = _P(voc_path or 'rootenizer/mini_shoreshnizer.json')
         self.shoresh_list = json.load(self.voc_path.open('rt'))
         print(f"Loaded {len(self.shoresh_list)} words with roots.")
     

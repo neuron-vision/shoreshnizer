@@ -126,11 +126,11 @@ class RootenizerTokenizer(object):
 
 
 if __name__ == '__main__':
-    voc_path = 'src/mini_shoreshnizer.json'
+    voc_path = 'rootenizer/mini_shoreshnizer.json'
     from root_predictor import RootPredictor
     root_predictor = RootPredictor()
 
-    self = Rootenizer(root_predictor)
+    self = RootenizerTokenizer(root_predictor)
     sentence = 'אם נסתכל על המשפט הזה נצליח להתבונן על מיקרי הקצה'
     sentence = "נסתכל להתבונן אוניברסיטה"
     embedding_list, breakdowns_list = self(sentence)
