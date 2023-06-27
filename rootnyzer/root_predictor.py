@@ -51,7 +51,7 @@ import os
 import json
 from typing import Tuple, List
 from word_break_down import WordBreakDown
-from rootenizer.rootenizer_utils import remove_characters
+from rootnyzer.rootnyzer_utils import remove_characters
 
 
 class RootPredictor(object):

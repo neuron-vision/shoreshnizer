@@ -97,8 +97,8 @@ class RootenizerTokenizer(object):
         Utility to dump tokens with html colors
         '''
         css = "<style> \n \
-                .root {background-color: yellow;} \n\
                 .prefix  {background-color: green;} \n\
+                .root {background-color: yellow;} \n\
                 .infix {background-color: orange;} \n\
                 .suffix {background-color: red;} \n\
                 </style>\n"
@@ -126,20 +126,20 @@ class RootenizerTokenizer(object):
 
 
 if __name__ == '__main__':
-    voc_path = 'rootenizer/mini_shoreshnizer.json'
-    from root_predictor import RootPredictor
+    from rootnyzer.rootnyzer_dataset import WordClusterDataset
+    from rootnyzer.root_predictor import RootPredictor
+    dataset = WordClusterDataset()
     root_predictor = RootPredictor()
+    root_predictor = Ro
+    index = 0
+    key = dataset.data_table.index[index]
+    row = dataset.data_table.iloc[index]
+    word, clusters = key, row[['P', 'R1', 'I1', 'R2', 'I2', 'R3']].values.astype('float32')
+    tensor, clusters_length = dataset[0]
+    print(key, tensor, clusters_length)
 
-    self = RootenizerTokenizer(root_predictor)
-    sentence = 'אם נסתכל על המשפט הזה נצליח להתבונן על מיקרי הקצה'
-    sentence = "נסתכל להתבונן אוניברסיטה"
-    embedding_list, breakdowns_list = self(sentence)
-    print("embedding_list")
-    print(embedding_list)
-    html = self.html(breakdowns_list)
-    sample_path = 'samples/1.html'
-    _P(sample_path).open('wt').write(html)
-    print(f"Samples is saved to {sample_path}")
-    os.system(f'open {sample_path}') # Works on OSX only
-    print(breakdowns_list)
-
+    self = RootenizerTokenizer()
+    #Lets visualize the dataset with colors.
+    lines = ''
+    for word, row in self.data_table.iterrows():
+        pass

@@ -7,7 +7,7 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader, Dataset
 from pathlib import Path as _P
-from rootenizer.rootenizer_dataset import WordClusterDataset
+from rootnyzer.rootnyzer_dataset import WordClusterDataset
 
 default_weights_path = _P('rootenizer/word_cluster_model.pth')
 

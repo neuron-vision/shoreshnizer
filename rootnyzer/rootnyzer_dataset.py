@@ -53,6 +53,12 @@ class WordClusterDataset(Dataset):
         values = torch.from_numpy(values)
         t= self.get_input_vectors_for_word(word)
         return t, values
+    
+    def augment_with_data(self):
+        '''
+        Load the 3 letters root and iteate with
+
+        '''
 
 
 if __name__ == '__main__':
@@ -63,4 +69,5 @@ if __name__ == '__main__':
     word, clusters = key, row[['P', 'R1', 'I1', 'R2', 'I2', 'R3']].values.astype('float32')
     tensor, clusters_length = self[0]
     print(key, tensor, clusters_length)
+    
 
