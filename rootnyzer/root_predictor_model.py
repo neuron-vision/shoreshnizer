@@ -2,13 +2,17 @@
 The Neural network to predict clusters length -> root indices.
 '''
 
+import json
+from pandas import DataFrame
 import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader, Dataset
 from pathlib import Path as _P
 from rootnyzer.rootnyzer_dataset import WordClusterDataset
+import os
 
+ROOT_FOLDER = _P(os.path.abspath(__file__)).parent.parent
 default_weights_path = _P('rootenizer/word_cluster_model.pth')
 
 
@@ -71,6 +75,7 @@ class WordClusterPredictor(nn.Module):
         # Save the trained model
         torch.save(self.state_dict(), default_weights_path)
         print(f"Model was saved to {default_weights_path}")
+
 
 
 

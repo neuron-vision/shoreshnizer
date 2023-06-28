@@ -2,3 +2,4 @@ __pycache__/
 draft/
 .vscode/launch.json
 rootenizer/word_cluster_model.pth
+synth_data/
