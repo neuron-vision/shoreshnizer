@@ -88,9 +88,11 @@ Given the existence of around 16 million potential combinations (25 bits), it is
 
 # Related Publications:
 
-| Name          | Description       | Link   |
-| :-----------  | :------------:    |  ----- |
+| Name          | Description       | Link   | Remarks |
+| :-----------  | :------------:    |  ----- | -- |
 | SHOROSHIM     | An extremely comprehensive English-language thesaurus of over thirty-three hundred Hebrew verb roots (Shoroshim) from all historical periods dating from the Biblical through modern times.              |  [PDF](https://halakhah.com/rst/shoroshim.pdf) |
+| YAP | YAP - Yet Another (natural language) Parser The building block for Hebrew NLP | [github](https://github.com/OnlpLab/yap) | Runtime is high due to extra tasks YAP which Rootnyer avoids. |
+
 
 
 
