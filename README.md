@@ -96,9 +96,9 @@ Given the existence of around 16 million potential combinations (25 bits), it is
 
 ## Code Usage
 
-The rootenizer.py file includes a main script that enables testing and viewing of results. Additionally, the script generates HTML tags for displaying word breakdowns with color formatting. You can refer to the [html example](samples/1.html) to see a demonstration.
+The rootnyzer.py file includes a main script that enables testing and viewing of results. Additionally, the script generates HTML tags for displaying word breakdowns with color formatting. You can refer to the [html example](samples/1.html) to see a demonstration.
 
-For developer documentation, please consult the [Code README](rootenizer/README.md) It provides detailed information and instructions for developers working with the code.
+For developer documentation, please consult the [Code README](rootnyzer/README.md) It provides detailed information and instructions for developers working with the code.
 
 ## License
 The code is licensed under MIT, granting you the freedom to use it freely, including for commercial purposes. Feel free to utilize the code as you wish and consider contributing to the development of language models running on edge devices.

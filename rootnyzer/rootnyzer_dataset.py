@@ -1,7 +1,7 @@
 '''
 Author: Ishay Tubi, Neuron Vision. 2023.
 Description:
-Rootenizer dataset translating word into vector reps and the root indices.
+rootnyzer dataset translating word into vector reps and the root indices.
 '''
 
 import torch
@@ -10,7 +10,7 @@ from pathlib import Path as _P
 
 from pandas import DataFrame, read_csv
 
-dataset_path = _P('rootenizer/rootenizer - Dataset.csv')
+dataset_path = _P('rootnyzer/rootnyzer - Dataset.csv')
 
 
 def load_dataset(dataset_path=dataset_path):

@@ -9,11 +9,13 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader, Dataset
 from pathlib import Path as _P
+import sys
+print(sys.path)
 from rootnyzer.rootnyzer_dataset import WordClusterDataset
 import os
 
 ROOT_FOLDER = _P(os.path.abspath(__file__)).parent.parent
-default_weights_path = _P('rootenizer/word_cluster_model.pth')
+default_weights_path = _P('rootnyzer/word_cluster_model.pth')
 
 
 # Define the neural network architecture

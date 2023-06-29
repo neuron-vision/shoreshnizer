@@ -11,10 +11,10 @@ import os
 import json
 from typing import Tuple, List
 from word_break_down import WordBreakDown
-from rootenizer_utils import character_index
+from rootnyzer_utils import character_index
 
 
-class RootenizerTokenizer(object):
+class rootnyzerTokenizer(object):
     '''
     Predict the root of each root and cluster all the rest of the characters.
     '''
@@ -130,7 +130,6 @@ if __name__ == '__main__':
     from rootnyzer.root_predictor import RootPredictor
     dataset = WordClusterDataset()
     root_predictor = RootPredictor()
-    root_predictor = Ro
     index = 0
     key = dataset.data_table.index[index]
     row = dataset.data_table.iloc[index]
@@ -138,8 +137,10 @@ if __name__ == '__main__':
     tensor, clusters_length = dataset[0]
     print(key, tensor, clusters_length)
 
-    self = RootenizerTokenizer()
+    self = rootnyzerTokenizer(root_predictor)
     #Lets visualize the dataset with colors.
-    lines = ''
-    for word, row in self.data_table.iterrows():
-        pass
+    the_sentence = "משפט שנקצה לפרק"
+    embedding_list, breakdowns_list = self(the_sentence)
+    print(the_sentence)
+    for breakdown, embeddings in zip(breakdowns_list, embedding_list):
+        print(breakdown, embeddings)

@@ -6,8 +6,8 @@
         "optim",
         "PRIS",
         "relu",
-        "rootenizer",
-        "Rootenizer",
+        "rootnyzer",
+        "rootnyzer",
         "shoresh",
         "sofiot",
         "Tubi",
@@ -15,5 +15,8 @@
         "יתכנסו",
         "לדוגמא",
         "מימוש"
-    ]
+    ],
+    "terminal.integrated.env.osx": {
+        "PYTHONPATH": "${workspaceFolder}"
+    }
 }
